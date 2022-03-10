@@ -1,12 +1,11 @@
-# before_script:
-#   - cp ${GOOGLE_CREDENTIALS} ${ROOT}/serviceaccount.json
-
 stages:
     - deploy-dev
+    - view
 
+# Reusable job to deploy app to gke
 .deploy-to-gke:
   stage: deploy-dev
-  # image: google/cloud-sdk
+  image: google/cloud-sdk
   variables:
     ROOT: "."
     GCLOUD_SDK: "google/cloud-sdk"
@@ -22,8 +21,23 @@ stages:
     - gcloud container clusters get-credentials ${CLUSTER_NAME} --region=${REGION} --project=${PROJECT}
     - kubectl apply -f ${MANIFEST}
 
+# Reusable job to view deployed app
+.verify-deployment:
+  stage: view
+  script:
+    - gcloud auth activate-service-account --key-file ${ROOT}/serviceaccount.json
+    - gcloud container clusters get-credentials ${CLUSTER_NAME} --region=${REGION} --project=${PROJECT}
+    - kubectl get all
 
+# Use reusable jobs in pipeline
 deploy-dev:
   extends: .deploy-to-gke
+  only:
+    - main
+
+view-app:
+  extends: .verify-deployment
+  dependencies:
+    - deploy-dev
   only:
     - main
