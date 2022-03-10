@@ -1,0 +1,8 @@
+.gkedeploy:
+  image: google/cloud-sdk
+  script: 
+    - echo "Deploying app..."
+    - ls -al
+    - echo ${GOOGLE_CREDENTIALS} > ${ROOT}/serviceaccount.json
+    - gcloud auth activate-service-account --key-file ${ROOT}/serviceaccount.json
+    - gcloud container clusters get-credentials ${CLUSTER_NAME} --region=${REGION} --project=${PROJECT}
