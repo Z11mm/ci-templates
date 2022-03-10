@@ -1,0 +1,26 @@
+stages:
+    - deploy-dev
+
+.deploy-to-gke:
+  stage: deploy-dev
+  # image: google/cloud-sdk
+  variables:
+    ROOT: "."
+    GCLOUD_SDK: "google/cloud-sdk"
+    CLUSTER_NAME: "boutique-cluster-development"
+    REGION: "us-east1"
+    PROJECT: "deimos-internal-playground"
+    MANIFEST: "./release/kubernetes-manifests.yaml"    
+  script: 
+    - echo "Deploying app..."
+    - ls -al
+    - echo ${GOOGLE_CREDENTIALS} > ${ROOT}/serviceaccount.json
+    - gcloud auth activate-service-account --key-file ${ROOT}/serviceaccount.json
+    - gcloud container clusters get-credentials ${CLUSTER_NAME} --region=${REGION} --project=${PROJECT}
+    - kubectl apply -f ${MANIFEST}
+
+
+deploy-dev:
+  extends: .deploy-to-gke
+  only:
+    - main
