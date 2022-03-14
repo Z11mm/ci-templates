@@ -4,23 +4,18 @@ variables:
   CLUSTER_NAME: ${CLUSTER_NAME}
   REGION: ${REGION}
   PROJECT: ${PROJECT}
+  NAMESPACE: ${NAMESPACE}
   MANIFEST: ${MANIFEST}
 
 stages:
   - deploy-dev
   - view
+  - takedown
 
 # Reusable job to deploy app to gke
 .deploy-to-gke:
   stage: deploy-dev
   image: google/cloud-sdk
-  # variables:
-  #   ROOT: ${ROOT}
-  #   GCLOUD_SDK: ${GCLOUD_SDK}
-  #   CLUSTER_NAME: ${CLUSTER_NAME}
-  #   REGION: ${REGION}
-  #   PROJECT: ${PROJECT}
-  #   MANIFEST: ${MANIFEST}
   script:
     - echo "Deploying app..."
     - ls -al
@@ -36,6 +31,15 @@ stages:
     - gcloud container clusters get-credentials ${CLUSTER_NAME} --region=${REGION} --project=${PROJECT}
     - kubectl get all
 
+# Reusable job to remove deployed app
+.remove-deployment:
+  stage: takedown
+  when: manual
+  script:
+    - echo "Taking down application"
+    - kubectl get deploy -A
+    # - kubectl delete deploy 
+
 # Use reusable jobs in pipeline
 deploy-dev:
   extends: .deploy-to-gke
@@ -46,5 +50,13 @@ view-app:
   extends: .verify-deployment
   dependencies:
     - deploy-dev
+  only:
+    - main
+
+remove-app:
+  extends: .remove-deployment
+  dependencies:
+    - deploy-dev
+    - view-app
   only:
     - main
