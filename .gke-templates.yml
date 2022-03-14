@@ -37,7 +37,7 @@ stages:
   when: manual
   script:
     - echo "Taking down application"
-    - kubectl get deploy -A
+    - kubectl get deployments -n ${NAMESPACE}
     # - kubectl delete deploy 
 
 # Use reusable jobs in pipeline
