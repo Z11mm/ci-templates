@@ -19,13 +19,20 @@ stages:
   image: google/cloud-sdk
   script:
     - echo "Deploying app..."
-    - ls -al
+    # Install helm
+    - curl https://baltocdn.com/helm/signing.asc | apt-key add -
+    - apt-get install apt-transport-https --yes
+    - echo "deb https://baltocdn.com/helm/stable/debian/ all main" | tee /etc/apt/sources.list.d/helm-stable-debian.list
+    - apt-get update
+    - apt-get install helm
+    # Authenticate to GCP
     - gcloud auth activate-service-account --key-file ${ROOT}/serviceaccount.json
     - gcloud container clusters get-credentials ${CLUSTER_NAME} --region=${REGION} --project=${PROJECT}
+    # Add helm release
     - helm repo add boutique ${HELM_REPO_URL}
-    # - helm repo update
+    - helm repo update
+    # Deploy app using Helm
     - helm install --namespace helm-boutique-app --repo ${HELM_REPO_URL} boutique boutique-chart
-    # - kubectl apply -f ${MANIFEST}
   environment: development
 
 # Reusable job to view deployed app
