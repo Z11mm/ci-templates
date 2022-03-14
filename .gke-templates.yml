@@ -24,6 +24,7 @@ stages:
     - gcloud container clusters get-credentials ${CLUSTER_NAME} --region=${REGION} --project=${PROJECT}
     - helm repo add boutique ${HELM_REPO_URL}
     # - helm repo update
+    - helm install --namespace helm-boutique-app --repo https://storage.googleapis.com/helm-bucket-repo-test/boutique-chart boutique-chart boutique
     # - kubectl apply -f ${MANIFEST}
   environment: development
 
