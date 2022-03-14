@@ -1,5 +1,3 @@
-image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.7.2-kube-1.21.5-alpine-3.15
-
 variables:
   ROOT: ${ROOT}
   GCLOUD_SDK: ${GCLOUD_SDK}
@@ -25,7 +23,7 @@ stages:
     - gcloud auth activate-service-account --key-file ${ROOT}/serviceaccount.json
     - gcloud container clusters get-credentials ${CLUSTER_NAME} --region=${REGION} --project=${PROJECT}
     - helm repo add boutique ${HELM_REPO_URL}
-    - helm repo update
+    # - helm repo update
     # - kubectl apply -f ${MANIFEST}
   environment: development
 
