@@ -26,6 +26,7 @@ stages:
     - helm repo add boutique ${HELM_REPO_URL}
     - helm repo update
     # - kubectl apply -f ${MANIFEST}
+  environment: development
 
 # Reusable job to view deployed app
 .verify-deployment:
