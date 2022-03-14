@@ -39,8 +39,8 @@ stages:
     - echo "Taking down application"
     - gcloud auth activate-service-account --key-file ${ROOT}/serviceaccount.json
     - gcloud container clusters get-credentials ${CLUSTER_NAME} --region=${REGION} --project=${PROJECT}
-    - kubectl get deploy -A -n ${NAMESPACE}
-    - kubectl delete deploy $(kubectl get deploy -A -n ${NAMESPACE})
+    - kubectl get deployment -n ${NAMESPACE}
+    - kubectl delete deployment -n ${NAMESPACE}
 
 # Use reusable jobs in pipeline
 deploy-dev:
