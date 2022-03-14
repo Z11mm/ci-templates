@@ -39,7 +39,7 @@ stages:
     - echo "Taking down application"
     - gcloud auth activate-service-account --key-file ${ROOT}/serviceaccount.json
     - gcloud container clusters get-credentials ${CLUSTER_NAME} --region=${REGION} --project=${PROJECT}
-    - kubectl get deployments -n ${NAMESPACE}
+    - kubectl get deploy -A -n ${NAMESPACE}
     # - kubectl delete deploy 
 
 # Use reusable jobs in pipeline
