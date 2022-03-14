@@ -5,14 +5,15 @@ variables:
   REGION: ${REGION}
   PROJECT: ${PROJECT}
   NAMESPACE: ${NAMESPACE}
-  MANIFEST: ${MANIFEST}
+  HELM_REPO_URL: ${HELM_REPO_URL}
+  # MANIFEST: ${MANIFEST}
 
 stages:
   - deploy-dev
   - view
   - takedown
 
-# Reusable job to deploy app to gke
+# Reusable job to deploy app to gke using helm
 .deploy-to-gke:
   stage: deploy-dev
   image: google/cloud-sdk
@@ -21,7 +22,10 @@ stages:
     - ls -al
     - gcloud auth activate-service-account --key-file ${ROOT}/serviceaccount.json
     - gcloud container clusters get-credentials ${CLUSTER_NAME} --region=${REGION} --project=${PROJECT}
-    - kubectl apply -f ${MANIFEST}
+    - kubectl create namespace helm-boutique-app
+    - helm repo add boutique ${HELM_REPO_URL}
+    - helm repo update
+    # - kubectl apply -f ${MANIFEST}
 
 # Reusable job to view deployed app
 .verify-deployment:
