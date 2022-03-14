@@ -37,6 +37,8 @@ stages:
   when: manual
   script:
     - echo "Taking down application"
+    - gcloud auth activate-service-account --key-file ${ROOT}/serviceaccount.json
+    - gcloud container clusters get-credentials ${CLUSTER_NAME} --region=${REGION} --project=${PROJECT}
     - kubectl get deployments -n ${NAMESPACE}
     # - kubectl delete deploy 
 
