@@ -30,7 +30,7 @@ stages:
     # Authenticate to GCP
     - gcloud auth activate-service-account --key-file ${ROOT}/serviceaccount.json
     - gcloud container clusters get-credentials ${CLUSTER_NAME} --region=${REGION} --project=${PROJECT}
-    - helm uninstall boutique
+    - helm uninstall boutique --debug
     # Add helm release
     # - helm repo add boutique ${HELM_REPO_URL}
     # - helm repo update
