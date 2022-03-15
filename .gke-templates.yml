@@ -32,7 +32,7 @@ stages:
     - helm repo add boutique ${HELM_REPO_URL}
     - helm repo update
     # Deploy app using Helm
-    - helm upgrade -f boutique-chart/values.yaml --namespace helm-boutique-app boutique boutique-chart --install
+    - helm upgrade --namespace helm-boutique-app boutique boutique-chart --install
     # - helm install --namespace helm-boutique-app --repo ${HELM_REPO_URL} boutique-chart --generate-name
   environment: development
 
