@@ -30,12 +30,12 @@ stages:
     # Authenticate to GCP
     - gcloud auth activate-service-account --key-file ${ROOT}/serviceaccount.json
     - gcloud container clusters get-credentials ${CLUSTER_NAME} --region=${REGION} --project=${PROJECT}
-    - helm uninstall boutique-01
+    # - helm uninstall boutique-01
     # Add helm release
     # - helm repo add boutique ${HELM_REPO_URL}
     # - helm repo update
     # Deploy app using Helm
-    # - helm upgrade -f boutique-chart/values.yaml --namespace helm-boutique-app boutique boutique-chart --install
+    - helm upgrade -f boutique-chart/values.yaml --namespace helm-boutique-app boutique boutique-chart
     # - helm install --namespace helm-boutique-app --repo ${HELM_REPO_URL} boutique-chart --generate-name
   environment: development
 
