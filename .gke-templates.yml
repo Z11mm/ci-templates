@@ -34,7 +34,7 @@ stages:
     - helm repo update
     # Deploy app using Helm
     # - helm upgrade --namespace helm-boutique-app boutique boutique-chart
-    - helm install --namespace helm-boutique-app --repo ${HELM_REPO_URL} boutique boutique-chart
+    - helm install --namespace helm-boutique-app --repo ${HELM_REPO_URL} boutique-01 boutique-chart
   environment: development
 
 # Reusable job to view deployed app
