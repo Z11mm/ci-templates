@@ -25,17 +25,16 @@ stages:
     - echo "deb https://baltocdn.com/helm/stable/debian/ all main" | tee /etc/apt/sources.list.d/helm-stable-debian.list
     - apt-get update
     - apt-get install helm
-    # DEBUG
     
     # Authenticate to GCP
     - gcloud auth activate-service-account --key-file ${ROOT}/serviceaccount.json
     - gcloud container clusters get-credentials ${CLUSTER_NAME} --region=${REGION} --project=${PROJECT}
-    # - helm uninstall boutique-01
+    - helm uninstall boutique
     # Add helm release
-    - helm repo add boutique ${HELM_REPO_URL}
-    - helm repo update
+    # - helm repo add boutique ${HELM_REPO_URL}
+    # - helm repo update
     # Deploy app using Helm
-    - helm upgrade --namespace helm-boutique-app boutique boutique-chart
+    # - helm upgrade --namespace helm-boutique-app boutique boutique-chart
     # - helm install --namespace helm-boutique-app --repo ${HELM_REPO_URL} boutique-chart --generate-name
   environment: development
 
