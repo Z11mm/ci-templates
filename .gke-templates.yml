@@ -1,12 +1,10 @@
 variables:
   ROOT: ${ROOT}
-  GCLOUD_SDK: ${GCLOUD_SDK}
   CLUSTER_NAME: ${CLUSTER_NAME}
   REGION: ${REGION}
   PROJECT: ${PROJECT}
   NAMESPACE: ${NAMESPACE}
   HELM_REPO_URL: ${HELM_REPO_URL}
-  # MANIFEST: ${MANIFEST}
 
 stages:
   - deploy-dev
@@ -29,12 +27,10 @@ stages:
     # Authenticate to GCP
     - gcloud auth activate-service-account --key-file ${ROOT}/serviceaccount.json
     - gcloud container clusters get-credentials ${CLUSTER_NAME} --region=${REGION} --project=${PROJECT}
-    # Add helm release
-    - helm repo add boutique-app ${HELM_REPO_URL}
-    - helm repo update
-    # Deploy app using Helm
-    # - helm upgrade --namespace helm-boutique-app boutique boutique-chart
-    - helm install --namespace helm-boutique-app --repo ${HELM_REPO_URL} boutique-app boutique-chart
+    # Install helm release
+    - helm install boutique-app boutique-chart/ --namespace ${NAMESPACE}
+    # Check the installed releases
+    - helm ls
   environment: development
 
 # Reusable job to view deployed app
