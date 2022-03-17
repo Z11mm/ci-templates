@@ -28,7 +28,7 @@ stages:
     - gcloud auth activate-service-account --key-file ${ROOT}/serviceaccount.json
     - gcloud container clusters get-credentials ${CLUSTER_NAME} --region=${REGION} --project=${PROJECT}
     # Install helm release
-    - helm install boutique-app1 boutique-chart/ --namespace ${NAMESPACE}
+    - helm install boutique boutique-chart/ --namespace ${NAMESPACE}
     # Check the installed releases
     - helm ls
   environment: development
